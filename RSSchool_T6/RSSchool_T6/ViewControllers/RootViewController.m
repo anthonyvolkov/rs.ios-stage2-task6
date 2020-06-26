@@ -65,7 +65,8 @@
     
     CATransition *transition = [[CATransition alloc] init];
     transition.duration = 0.5;
-    transition.type = kCATransitionFade;
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromRight;
     [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
     

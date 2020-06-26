@@ -13,6 +13,7 @@
 
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBarTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *labelCreationDate;
@@ -42,17 +43,42 @@
     if (self.phAsset.mediaType == PHAssetMediaTypeImage || self.phAsset.mediaType == PHAssetMediaTypeVideo) {
         PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
         options.resizeMode = PHImageRequestOptionsResizeModeExact;
-
+        
+        NSInteger retinaMultiplier = [UIScreen mainScreen].scale;
+        
+        NSLog(@"view w -%f",self.view.bounds.size.width);
+        
+        NSLog(@"imageView w - %f",self.imageView.frame.size.width);
+        NSLog(@"imageView w - %f",self.imageView.frame.size.height);
+        
+        
+        self.imageView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width * self.phAsset.pixelHeight/self.phAsset.pixelWidth);
+        
+        NSLog(@"imageView w - %f",self.imageView.frame.size.width);
+        NSLog(@"imageView w - %f",self.imageView.frame.size.height);
+        
+        
+        
+        CGSize retinaSquare = CGSizeMake(self.view.bounds.size.width * retinaMultiplier, self.view.bounds.size.width * self.phAsset.pixelHeight/self.phAsset.pixelWidth * retinaMultiplier);
+        
         [[PHImageManager defaultManager]
          requestImageForAsset:(PHAsset *)self.phAsset
-         targetSize:PHImageManagerMaximumSize
+         targetSize:retinaSquare                //PHImageManagerMaximumSize
          contentMode:PHImageContentModeAspectFill
          options:options
          resultHandler:^(UIImage *result, NSDictionary *info) {
             
-            self.imageView.image =[UIImage imageWithCGImage:result.CGImage scale:1 orientation:result.imageOrientation];
+            self.imageView.image =[UIImage imageWithCGImage:result.CGImage scale:retinaMultiplier orientation:result.imageOrientation];
             
         }];
+        
+        CGRect contentRect = CGRectZero;
+        
+        for (UIView *view in self.scrollView.subviews) {
+            contentRect = CGRectUnion(contentRect, view.frame);
+        }
+        self.scrollView.contentSize = contentRect.size;
+        
     }
     
     switch (self.phAsset.mediaType) {
@@ -77,20 +103,21 @@
 
 - (IBAction)leftBarButtonPressed:(id)sender {
     
-    CATransition *transition = [[CATransition alloc] init];
-    transition.duration = 0.5;
-    transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromLeft;
-    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+//    CATransition *transition = [[CATransition alloc] init];
+//    transition.duration = 0.5;
+//    transition.type = kCATransitionPush;
+//    transition.subtype = kCATransitionFromLeft;
+//    [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     
-    [self dismissViewControllerAnimated:false completion:nil];
+    [self dismissViewControllerAnimated:true completion:nil];
     
 }
 
 
 - (IBAction)buttonSharePressed:(id)sender {
     
-    
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[self.phAsset] applicationActivities:nil];
+    [self presentViewController:activityViewController animated:true completion:nil];
 }
 
 

@@ -7,8 +7,11 @@
 //
 
 #import "CollectionViewController.h"
+#import <Photos/Photos.h>
 
 @interface CollectionViewController ()
+
+@property (nonatomic, strong) PHFetchResult *fetchResult;
 
 @end
 
@@ -19,12 +22,25 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
     // Register cell classes
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
+    
+    PHFetchOptions* options = [[PHFetchOptions alloc]init];
+    options.sortDescriptors = @[ [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:true] ];
+    self.fetchResult = [PHAsset fetchAssetsWithOptions:options];
+    
+    
+//    UICollectionViewFlowLayout *collectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+//    collectionViewFlowLayout.itemSize = CGSizeMake((self.view.bounds.size.width/3 - 4 * 5), (self.view.bounds.size.width/3 - 4 * 5));
+//    collectionViewFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+//    collectionViewFlowLayout.sectionInset = UIEdgeInsetsZero;
+//    self.collectionView.collectionViewLayout = collectionViewFlowLayout;
+    
+//    self.collectionViewLayout
+    
+    
+//    UICollectionViewFlowLayout(self.collectionView.collectionViewLayout);
     // Do any additional setup after loading the view.
 }
 
@@ -41,17 +57,19 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 3;
+    return 1;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
+    return self.fetchResult.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
+    
+    cell.backgroundView.backgroundColor = [UIColor redColor];
     // Configure the cell
     
     return cell;

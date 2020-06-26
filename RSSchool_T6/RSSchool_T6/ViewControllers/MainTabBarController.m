@@ -31,13 +31,20 @@
     UINavigationController *tabBarController1 = [[UINavigationController alloc] initWithRootViewController:tableViewController];
     tabBarController1.tabBarItem.image = [UIImage imageNamed:@"info_unselected"];
     tabBarController1.navigationBar.barTintColor = [UIColor customYellowColor];
+
     
+    UICollectionViewFlowLayout *collectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    collectionViewFlowLayout.itemSize = CGSizeMake((self.view.bounds.size.width/3 - 4 * 5), (self.view.bounds.size.width/3 - 4 * 5));
+    collectionViewFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+//    collectionViewFlowLayout.sectionInset = UIEdgeInsetsZero;
     
-//    CollectionViewController *collectionViewController = [[CollectionViewController alloc] init];
+    CollectionViewController *collectionViewController = [[CollectionViewController alloc] initWithCollectionViewLayout:collectionViewFlowLayout];
+    collectionViewController.navigationItem.title = @"Gallery";
+    
+//    UIViewController *collectionViewController = [[UIViewController alloc] init];
 //    collectionViewController.navigationItem.title = @"Gallery";
     
-    UIViewController *collectionViewController = [[UIViewController alloc] init];
-    collectionViewController.navigationItem.title = @"Gallery";
+
     
     UINavigationController *tabBarController2 = [[UINavigationController alloc] initWithRootViewController:collectionViewController];
     tabBarController2.tabBarItem.image = [UIImage imageNamed:@"gallery_unselected"];

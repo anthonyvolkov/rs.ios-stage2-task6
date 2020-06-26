@@ -50,12 +50,10 @@
     
     CATransition *transition = [[CATransition alloc] init];
     transition.duration = 0.5;
-    transition.type = kCATransitionMoveIn;
+    transition.type = kCATransitionPush;
     transition.subtype = kCATransitionFromRight;
     [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
-    
-    
     
     [self presentViewController:detailsViewController animated:false completion:nil];
     
@@ -77,7 +75,7 @@
     
     
     if (phAsset.mediaType == PHAssetMediaTypeImage || phAsset.mediaType == PHAssetMediaTypeVideo) {
-            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
         options.resizeMode = PHImageRequestOptionsResizeModeExact;
         
         NSInteger retinaMultiplier = [UIScreen mainScreen].scale;
